@@ -7,27 +7,19 @@
   <meta name="description" content="Una tarjeta floral de cumpleaños para Faby" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-1: #fff4ec;
-      --bg-2: #ffe1e8;
-      --bg-3: #f6e3ff;
       --gold-dark: #9a6b12;
       --gold: #d4a437;
       --gold-light: #fff1b8;
+      --rosa: #b5577a;
       --ink: #5b3a4a;
-      --card-bg: rgba(255, 255, 255, 0.55);
-      --card-border: rgba(212, 164, 55, 0.55);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
 
     body {
       font-family: "Cormorant Garamond", Georgia, serif;
@@ -35,13 +27,14 @@
       background:
         radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.9) 0%, transparent 45%),
         radial-gradient(circle at 85% 75%, rgba(255, 214, 230, 0.8) 0%, transparent 50%),
-        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
-      background-attachment: fixed;
+        linear-gradient(160deg, #fff4ec 0%, #ffe1e8 50%, #f6e3ff 100%);
+      cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
+      -webkit-user-select: none;
     }
 
-    /* Lienzo de flores a pantalla completa */
+    /* Flores a pantalla completa */
     #flores {
       position: fixed;
       inset: 0;
@@ -51,185 +44,230 @@
       display: block;
     }
 
-    /* Velo suave para que el texto destaque sobre las flores */
-    .velo {
+    /* ---------- Imagen de Jesús ---------- */
+    .jesus {
       position: fixed;
-      left: 0; right: 0; bottom: 0;
-      height: 55%;
+      left: 50%;
+      top: 0;
+      height: 92vh;
+      max-width: 96vw;
       z-index: 2;
       pointer-events: none;
-      background: linear-gradient(to top, rgba(255, 244, 236, 0.75) 0%, rgba(255, 244, 236, 0.35) 45%, transparent 100%);
+      opacity: 0;
+      transform: translate(-50%, -12%);
+      transition: opacity 1.4s ease, transform 1.6s cubic-bezier(.2, .8, .2, 1);
+    }
+    .jesus svg, .jesus img { height: 100%; width: auto; max-width: 96vw; display: block; }
+    body.mostrar-jesus .jesus {
+      opacity: 0.75;                     /* 75 % de opacidad */
+      transform: translate(-50%, 0);
     }
 
-    /* Contenedor del mensaje (centro-inferior) */
-    .escena {
+    /* ---------- Textos ---------- */
+    .mensaje {
       position: fixed;
       inset: 0;
       z-index: 3;
       display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 16px 16px max(9vh, calc(env(safe-area-inset-bottom) + 48px));
-      pointer-events: none;
-    }
-
-    .tarjeta {
-      position: relative;
-      width: min(760px, 100%);
-      padding: clamp(26px, 5vw, 48px) clamp(20px, 5vw, 56px);
-      text-align: center;
-      background: var(--card-bg);
-      backdrop-filter: blur(10px) saturate(130%);
-      -webkit-backdrop-filter: blur(10px) saturate(130%);
-      border: 1px solid var(--card-border);
-      border-radius: 28px;
-      box-shadow:
-        0 20px 60px rgba(154, 107, 18, 0.18),
-        0 2px 0 rgba(255, 255, 255, 0.8) inset;
-      opacity: 0;
-      transform: translateY(40px) scale(0.96);
-      animation: aparecer 1.8s cubic-bezier(.2, .8, .2, 1) 0.8s forwards;
-    }
-
-    /* Marco interior dorado */
-    .tarjeta::before {
-      content: "";
-      position: absolute;
-      inset: 10px;
-      border: 1px solid rgba(212, 164, 55, 0.35);
-      border-radius: 20px;
-      pointer-events: none;
-    }
-
-    .adorno {
-      display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      color: var(--gold);
-      font-size: clamp(14px, 3vw, 18px);
-      opacity: 0;
-      animation: fadeIn 1.4s ease 1.8s forwards;
+      pointer-events: none;
+      padding: 0 2vw;
     }
 
-    .adorno .linea {
-      height: 1px;
-      width: clamp(40px, 12vw, 110px);
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    }
-
-    .subtitulo {
-      font-family: "Great Vibes", cursive;
-      font-size: clamp(26px, 6vw, 40px);
-      color: #b5577a;
-      margin: 6px 0 4px;
-      opacity: 0;
-      animation: fadeIn 1.4s ease 2s forwards;
-    }
-
-    .titulo {
+    .faby {
       font-family: "Cinzel Decorative", "Times New Roman", serif;
       font-weight: 700;
-      font-size: clamp(22px, 5.4vw, 52px);
-      line-height: 1.25;
-      letter-spacing: 0.04em;
-      margin: 8px 0 10px;
-      background: linear-gradient(
-        100deg,
-        var(--gold-dark) 0%,
-        var(--gold) 25%,
-        var(--gold-light) 45%,
-        var(--gold) 55%,
-        var(--gold-dark) 75%,
-        var(--gold) 100%
-      );
+      /* Ocupa el ancho de la pantalla */
+      font-size: min(26vw, 48vh);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      background: linear-gradient(100deg,
+        var(--gold-dark) 0%, var(--gold) 25%, var(--gold-light) 45%,
+        var(--gold) 55%, var(--gold-dark) 75%, var(--gold) 100%);
       background-size: 250% auto;
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 2px 6px rgba(154, 107, 18, 0.25));
-      animation: brillo 5s linear infinite;
-    }
-
-    .titulo .nombre {
-      display: block;
-      font-size: 1.45em;
-      letter-spacing: 0.12em;
-      margin-top: 4px;
-    }
-
-    .pie {
-      font-style: italic;
-      font-size: clamp(15px, 3.4vw, 20px);
-      color: var(--ink);
+      filter: drop-shadow(0 4px 10px rgba(154, 107, 18, 0.3));
       opacity: 0;
-      animation: fadeIn 1.4s ease 2.6s forwards;
+      animation: aparecer 1.8s cubic-bezier(.2, .8, .2, 1) 0.4s forwards,
+                 brillo 5s linear infinite;
+    }
+
+    .linea2, .firma {
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(30px, 7vw, 72px);
+      color: var(--rosa);
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.9), 0 0 2px rgba(255, 255, 255, 0.9);
+      opacity: 0;
+    }
+
+    .linea2 {
+      margin-top: 0.1em;
+      animation: aparecer 1.6s ease 1.2s forwards;
+    }
+
+    .firma {
+      position: fixed;
+      right: max(18px, env(safe-area-inset-right));
+      bottom: max(14px, env(safe-area-inset-bottom));
+      z-index: 3;
+      pointer-events: none;
+      animation: aparecer 1.6s ease 2s forwards;
     }
 
     .pista {
       position: fixed;
-      top: max(14px, env(safe-area-inset-top));
+      top: max(16px, env(safe-area-inset-top));
       left: 50%;
       transform: translateX(-50%);
-      z-index: 3;
-      font-size: 14px;
-      color: rgba(91, 58, 74, 0.7);
-      background: rgba(255, 255, 255, 0.5);
-      padding: 6px 14px;
+      z-index: 4;
+      font-style: italic;
+      font-size: clamp(15px, 3.6vw, 20px);
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(212, 164, 55, 0.5);
+      padding: 8px 18px;
       border-radius: 999px;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       pointer-events: none;
-      opacity: 0;
-      animation: fadeIn 1s ease 3.5s forwards, fadeOut 1s ease 9s forwards;
       white-space: nowrap;
+      animation: latido 2.4s ease-in-out infinite;
     }
 
     @keyframes aparecer {
-      to { opacity: 1; transform: translateY(0) scale(1); }
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    @keyframes fadeIn { to { opacity: 1; } }
-    @keyframes fadeOut { to { opacity: 0; } }
     @keyframes brillo {
       0%   { background-position: 0% center; }
       100% { background-position: 250% center; }
     }
+    @keyframes latido {
+      0%, 100% { transform: translateX(-50%) scale(1); }
+      50%      { transform: translateX(-50%) scale(1.05); }
+    }
 
     @media (prefers-reduced-motion: reduce) {
-      .titulo { animation: none; }
-      .tarjeta, .adorno, .subtitulo, .pie { animation-duration: 0.01s; animation-delay: 0s; }
+      .faby, .pista { animation: none; opacity: 1; }
+      .linea2, .firma { animation: none; opacity: 1; }
     }
   </style>
 </head>
 <body>
   <canvas id="flores" aria-hidden="true"></canvas>
-  <div class="velo"></div>
 
-  <div class="pista">Toca la pantalla para más flores 🌸</div>
+  <!-- Imagen de Jesús entregando flores.
+       Si quieres usar tu propia imagen, reemplaza todo el <svg> por:
+       <img src="jesus.png" alt="Jesús entregando flores" />
+       y ajusta MANOS_X / MANOS_Y en el script (posición de las manos, de 0 a 1). -->
+  <div class="jesus" id="jesus" aria-hidden="true">
+    <svg viewBox="0 0 400 640" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fff7d1" stop-opacity="1" />
+          <stop offset="60%" stop-color="#ffe08a" stop-opacity="0.7" />
+          <stop offset="100%" stop-color="#ffd257" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient id="luz" cx="50%" cy="35%" r="60%">
+          <stop offset="0%" stop-color="#fffbe8" stop-opacity="0.9" />
+          <stop offset="100%" stop-color="#fffbe8" stop-opacity="0" />
+        </radialGradient>
+        <linearGradient id="tunica" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fffdf7" />
+          <stop offset="100%" stop-color="#ece4d4" />
+        </linearGradient>
+        <linearGradient id="manto" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#c2455a" />
+          <stop offset="100%" stop-color="#8e2a3c" />
+        </linearGradient>
+        <linearGradient id="pelo" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6b4527" />
+          <stop offset="100%" stop-color="#4a2e18" />
+        </linearGradient>
+      </defs>
 
-  <main class="escena">
-    <section class="tarjeta" role="img" aria-label="Feliz y bendecido cumpleaños Faby">
-      <div class="adorno"><span class="linea"></span>✿<span class="linea"></span></div>
-      <p class="subtitulo">Con todo cariño</p>
-      <h1 class="titulo">FELIZ Y BENDECIDO CUMPLEAÑOS <span class="nombre">FABY</span></h1>
-      <p class="pie">Que tu vida siga floreciendo 🌷</p>
-    </section>
+      <!-- Resplandor -->
+      <ellipse cx="200" cy="260" rx="200" ry="280" fill="url(#luz)" />
+      <circle cx="200" cy="108" r="78" fill="url(#halo)" />
+      <circle cx="200" cy="108" r="62" fill="none" stroke="#e8b84a" stroke-width="3" opacity="0.8" />
+
+      <!-- Cabello (detrás) -->
+      <path d="M148 112 Q146 46 200 44 Q254 46 252 112 L262 200 Q238 212 222 186 L178 186 Q162 212 138 200 Z" fill="url(#pelo)" />
+
+      <!-- Túnica -->
+      <path d="M168 172 Q200 192 232 172 L300 228 Q318 420 336 640 L64 640 Q82 420 100 228 Z" fill="url(#tunica)" />
+      <!-- Manto -->
+      <path d="M232 172 L300 228 Q318 420 336 640 L250 640 Q262 430 214 300 Q206 250 232 172 Z" fill="url(#manto)" />
+      <path d="M168 172 L120 214 Q150 228 176 196 Z" fill="url(#manto)" opacity="0.9" />
+
+      <!-- Cuello -->
+      <path d="M186 150 L214 150 L216 178 Q200 186 184 178 Z" fill="#dcae86" />
+
+      <!-- Rostro -->
+      <ellipse cx="200" cy="114" rx="33" ry="41" fill="#e9c09a" />
+      <!-- Cabello frontal -->
+      <path d="M166 104 Q170 64 200 62 Q230 64 234 104 Q222 80 200 78 Q178 80 166 104 Z" fill="url(#pelo)" />
+      <!-- Barba -->
+      <path d="M168 118 Q168 166 200 174 Q232 166 232 118 Q224 148 200 150 Q176 148 168 118 Z" fill="url(#pelo)" />
+      <!-- Ojos serenos -->
+      <path d="M181 112 Q187 116 193 112" stroke="#5a3a24" stroke-width="2" fill="none" stroke-linecap="round" />
+      <path d="M207 112 Q213 116 219 112" stroke="#5a3a24" stroke-width="2" fill="none" stroke-linecap="round" />
+      <!-- Sonrisa -->
+      <path d="M192 140 Q200 145 208 140" stroke="#8a4a34" stroke-width="2" fill="none" stroke-linecap="round" />
+
+      <!-- Brazos extendidos -->
+      <path d="M104 228 Q100 300 150 336 Q170 346 186 336 L184 314 Q158 314 140 290 Q126 262 132 232 Z" fill="url(#tunica)" stroke="#e0d6c2" stroke-width="1" />
+      <path d="M296 228 Q300 300 250 336 Q230 346 214 336 L216 314 Q242 314 260 290 Q274 262 268 232 Z" fill="url(#tunica)" stroke="#e0d6c2" stroke-width="1" />
+      <!-- Manos -->
+      <ellipse cx="186" cy="328" rx="15" ry="12" fill="#e9c09a" />
+      <ellipse cx="214" cy="328" rx="15" ry="12" fill="#e9c09a" />
+
+      <!-- Ramo de flores -->
+      <g>
+        <path d="M200 330 L178 270 M200 330 L200 262 M200 330 L222 270 M200 330 L190 276 M200 330 L212 276"
+              stroke="#4f8a3a" stroke-width="3" stroke-linecap="round" fill="none" />
+        <text x="178" y="272" font-size="30" text-anchor="middle">🌸</text>
+        <text x="200" y="262" font-size="32" text-anchor="middle">🌷</text>
+        <text x="222" y="272" font-size="30" text-anchor="middle">🌺</text>
+        <text x="189" y="290" font-size="24" text-anchor="middle">🌼</text>
+        <text x="212" y="290" font-size="24" text-anchor="middle">🌹</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="pista">✨ Toca la pantalla ✨</div>
+
+  <main class="mensaje">
+    <h1 class="faby">FABY</h1>
+    <p class="linea2">bendecido cumpleaños</p>
   </main>
+
+  <p class="firma">con cariño de Yo</p>
 
   <script>
     (() => {
+      // Posición de las manos dentro de la imagen (0 a 1), para que de ahí broten las flores
+      const MANOS_X = 0.5;
+      const MANOS_Y = 0.5;
+
       const canvas = document.getElementById("flores");
       const ctx = canvas.getContext("2d");
+      const jesus = document.getElementById("jesus");
       const FLORES = ["🌸", "🌺", "🌻", "🌷", "🌼", "💮", "🏵️", "🌹"];
       const reducirMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      let W = 0, H = 0, DPR = 1;
+      let W = 0, H = 0;
       let particulas = [];
       let maxParticulas = 120;
+      let mostrandoJesus = false;
       const cache = new Map();
 
-      // Pre-renderiza cada emoji en un canvas pequeño (mucho más rápido que fillText por cuadro)
+      // Pre-renderiza cada emoji una sola vez (más fluido)
       function sprite(emoji) {
         if (cache.has(emoji)) return cache.get(emoji);
         const tam = 96;
@@ -245,57 +283,57 @@
       }
 
       function redimensionar() {
-        DPR = Math.min(window.devicePixelRatio || 1, 2);
+        const DPR = Math.min(window.devicePixelRatio || 1, 2);
         W = window.innerWidth;
         H = window.innerHeight;
         canvas.width = W * DPR;
         canvas.height = H * DPR;
         ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-        // Densidad según el área de pantalla
         maxParticulas = Math.round(Math.min(220, Math.max(60, (W * H) / 7000)));
         if (reducirMovimiento) maxParticulas = Math.round(maxParticulas / 3);
       }
 
       const azar = (a, b) => a + Math.random() * (b - a);
 
-      function crear(x, y, explosion = false) {
-        const profundidad = Math.random(); // 0 = lejos, 1 = cerca
-        const tam = 16 + profundidad * 34;
+      function crear(x, y, deManos = false) {
+        const prof = Math.random();
         const p = {
           img: sprite(FLORES[(Math.random() * FLORES.length) | 0]),
           x: x ?? azar(-20, W + 20),
           y: y ?? azar(-H * 0.2, -40),
-          tam,
-          vy: 0.5 + profundidad * 1.6,
+          tam: 16 + prof * 34,
+          vy: 0.5 + prof * 1.6,
           vx: 0,
           fase: azar(0, Math.PI * 2),
           oscila: azar(0.4, 1.4),
           rot: azar(0, Math.PI * 2),
           vrot: azar(-0.02, 0.02),
-          alfa: 0.55 + profundidad * 0.45,
-          vida: 1,
-          explosion
+          alfa: 0.55 + prof * 0.45,
+          deManos
         };
-        if (explosion) {
-          const ang = azar(0, Math.PI * 2);
-          const fuerza = azar(2, 7);
-          p.vx = Math.cos(ang) * fuerza;
-          p.vy = Math.sin(ang) * fuerza - 2;
-          p.vrot = azar(-0.1, 0.1);
+        if (deManos) {
+          // Flores que Jesús entrega: caen desde sus manos hacia abajo
+          p.tam = azar(24, 44);
+          p.vx = azar(-1.6, 1.6);
+          p.vy = azar(1, 2.6);
+          p.alfa = 0.95;
         }
         return p;
       }
 
-      // Llenado inicial: flores ya repartidas por toda la pantalla
       function sembrar() {
         particulas = [];
-        for (let i = 0; i < maxParticulas; i++) {
-          particulas.push(crear(azar(0, W), azar(-H, H)));
-        }
+        for (let i = 0; i < maxParticulas; i++) particulas.push(crear(azar(0, W), azar(-H, H)));
+      }
+
+      function posicionManos() {
+        const r = jesus.getBoundingClientRect();
+        return { x: r.left + r.width * MANOS_X, y: r.top + r.height * MANOS_Y };
       }
 
       let ultimo = performance.now();
       let t = 0;
+      let acumulador = 0;
 
       function animar(ahora) {
         const dt = Math.min((ahora - ultimo) / 16.67, 3);
@@ -304,33 +342,40 @@
 
         ctx.clearRect(0, 0, W, H);
 
-        // Mantiene la cascada continua
+        // Cascada continua de fondo
         let normales = 0;
-        for (const p of particulas) if (!p.explosion) normales++;
+        for (const p of particulas) if (!p.deManos) normales++;
         while (normales < maxParticulas) { particulas.push(crear()); normales++; }
+
+        // Mientras se ve a Jesús, brotan flores de sus manos
+        if (mostrandoJesus) {
+          acumulador += dt * (reducirMovimiento ? 0.15 : 0.6);
+          const m = posicionManos();
+          while (acumulador >= 1) {
+            particulas.push(crear(m.x + azar(-20, 20), m.y + azar(-10, 10), true));
+            acumulador -= 1;
+          }
+        }
 
         for (let i = particulas.length - 1; i >= 0; i--) {
           const p = particulas[i];
-
-          if (p.explosion) {
-            p.vx *= 0.97;
-            p.vy = p.vy * 0.97 + 0.08 * dt;
-            p.x += p.vx * dt;
+          if (p.deManos) {
+            p.x += (p.vx + Math.sin(t * 2 + p.fase) * 0.5) * dt;
+            p.vy = Math.min(p.vy + 0.02 * dt, 3.2);
             p.y += p.vy * dt;
-            p.vida -= 0.006 * dt;
           } else {
             p.x += (Math.sin(t * p.oscila + p.fase) * 0.8 + 0.25) * dt;
             p.y += p.vy * dt;
           }
           p.rot += p.vrot * dt;
 
-          if (p.y - p.tam > H || p.x < -80 || p.x > W + 80 || p.vida <= 0) {
+          if (p.y - p.tam > H || p.x < -80 || p.x > W + 80) {
             particulas.splice(i, 1);
             continue;
           }
 
           ctx.save();
-          ctx.globalAlpha = p.alfa * Math.max(0, Math.min(1, p.vida));
+          ctx.globalAlpha = p.alfa;
           ctx.translate(p.x, p.y);
           ctx.rotate(p.rot);
           ctx.drawImage(p.img, -p.tam / 2, -p.tam / 2, p.tam, p.tam);
@@ -340,17 +385,12 @@
         requestAnimationFrame(animar);
       }
 
-      // Interacción: al tocar/clic brota un ramillete de flores
-      function brotar(e) {
-        const x = e.clientX ?? (e.touches && e.touches[0].clientX);
-        const y = e.clientY ?? (e.touches && e.touches[0].clientY);
-        if (x == null) return;
-        const n = reducirMovimiento ? 8 : 22;
-        for (let i = 0; i < n; i++) particulas.push(crear(x, y, true));
-      }
-
-      window.addEventListener("pointerdown", brotar);
-      window.addEventListener("resize", () => { redimensionar(); });
+      // Tocar: alterna entre "solo flores" y "Jesús entregando flores"
+      window.addEventListener("pointerdown", () => {
+        mostrandoJesus = !mostrandoJesus;
+        document.body.classList.toggle("mostrar-jesus", mostrandoJesus);
+      });
+      window.addEventListener("resize", redimensionar);
 
       redimensionar();
       sembrar();
