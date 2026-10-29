@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Feliz Cumpleaños Faby</title>
+  <meta name="description" content="Una tarjeta floral de cumpleaños para Faby" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-1: #fff4ec;
+      --bg-2: #ffe1e8;
+      --bg-3: #f6e3ff;
+      --gold-dark: #9a6b12;
+      --gold: #d4a437;
+      --gold-light: #fff1b8;
+      --ink: #5b3a4a;
+      --card-bg: rgba(255, 255, 255, 0.55);
+      --card-border: rgba(212, 164, 55, 0.55);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.9) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(255, 214, 230, 0.8) 0%, transparent 50%),
+        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+      background-attachment: fixed;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    /* Lienzo de flores a pantalla completa */
+    #flores {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: block;
+    }
+
+    /* Velo suave para que el texto destaque sobre las flores */
+    .velo {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      height: 55%;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(255, 244, 236, 0.75) 0%, rgba(255, 244, 236, 0.35) 45%, transparent 100%);
+    }
+
+    /* Contenedor del mensaje (centro-inferior) */
+    .escena {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 16px 16px max(9vh, calc(env(safe-area-inset-bottom) + 48px));
+      pointer-events: none;
+    }
+
+    .tarjeta {
+      position: relative;
+      width: min(760px, 100%);
+      padding: clamp(26px, 5vw, 48px) clamp(20px, 5vw, 56px);
+      text-align: center;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px) saturate(130%);
+      -webkit-backdrop-filter: blur(10px) saturate(130%);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      box-shadow:
+        0 20px 60px rgba(154, 107, 18, 0.18),
+        0 2px 0 rgba(255, 255, 255, 0.8) inset;
+      opacity: 0;
+      transform: translateY(40px) scale(0.96);
+      animation: aparecer 1.8s cubic-bezier(.2, .8, .2, 1) 0.8s forwards;
+    }
+
+    /* Marco interior dorado */
+    .tarjeta::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(212, 164, 55, 0.35);
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .adorno {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: var(--gold);
+      font-size: clamp(14px, 3vw, 18px);
+      opacity: 0;
+      animation: fadeIn 1.4s ease 1.8s forwards;
+    }
+
+    .adorno .linea {
+      height: 1px;
+      width: clamp(40px, 12vw, 110px);
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .subtitulo {
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(26px, 6vw, 40px);
+      color: #b5577a;
+      margin: 6px 0 4px;
+      opacity: 0;
+      animation: fadeIn 1.4s ease 2s forwards;
+    }
+
+    .titulo {
+      font-family: "Cinzel Decorative", "Times New Roman", serif;
+      font-weight: 700;
+      font-size: clamp(22px, 5.4vw, 52px);
+      line-height: 1.25;
+      letter-spacing: 0.04em;
+      margin: 8px 0 10px;
+      background: linear-gradient(
+        100deg,
+        var(--gold-dark) 0%,
+        var(--gold) 25%,
+        var(--gold-light) 45%,
+        var(--gold) 55%,
+        var(--gold-dark) 75%,
+        var(--gold) 100%
+      );
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 6px rgba(154, 107, 18, 0.25));
+      animation: brillo 5s linear infinite;
+    }
+
+    .titulo .nombre {
+      display: block;
+      font-size: 1.45em;
+      letter-spacing: 0.12em;
+      margin-top: 4px;
+    }
+
+    .pie {
+      font-style: italic;
+      font-size: clamp(15px, 3.4vw, 20px);
+      color: var(--ink);
+      opacity: 0;
+      animation: fadeIn 1.4s ease 2.6s forwards;
+    }
+
+    .pista {
+      position: fixed;
+      top: max(14px, env(safe-area-inset-top));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      font-size: 14px;
+      color: rgba(91, 58, 74, 0.7);
+      background: rgba(255, 255, 255, 0.5);
+      padding: 6px 14px;
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      pointer-events: none;
+      opacity: 0;
+      animation: fadeIn 1s ease 3.5s forwards, fadeOut 1s ease 9s forwards;
+      white-space: nowrap;
+    }
+
+    @keyframes aparecer {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes fadeOut { to { opacity: 0; } }
+    @keyframes brillo {
+      0%   { background-position: 0% center; }
+      100% { background-position: 250% center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .titulo { animation: none; }
+      .tarjeta, .adorno, .subtitulo, .pie { animation-duration: 0.01s; animation-delay: 0s; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="flores" aria-hidden="true"></canvas>
+  <div class="velo"></div>
+
+  <div class="pista">Toca la pantalla para más flores 🌸</div>
+
+  <main class="escena">
+    <section class="tarjeta" role="img" aria-label="Feliz y bendecido cumpleaños Faby">
+      <div class="adorno"><span class="linea"></span>✿<span class="linea"></span></div>
+      <p class="subtitulo">Con todo cariño</p>
+      <h1 class="titulo">FELIZ Y BENDECIDO CUMPLEAÑOS <span class="nombre">FABY</span></h1>
+      <p class="pie">Que tu vida siga floreciendo 🌷</p>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById("flores");
+      const ctx = canvas.getContext("2d");
+      const FLORES = ["🌸", "🌺", "🌻", "🌷", "🌼", "💮", "🏵️", "🌹"];
+      const reducirMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      let W = 0, H = 0, DPR = 1;
+      let particulas = [];
+      let maxParticulas = 120;
+      const cache = new Map();
+
+      // Pre-renderiza cada emoji en un canvas pequeño (mucho más rápido que fillText por cuadro)
+      function sprite(emoji) {
+        if (cache.has(emoji)) return cache.get(emoji);
+        const tam = 96;
+        const c = document.createElement("canvas");
+        c.width = c.height = tam;
+        const g = c.getContext("2d");
+        g.textAlign = "center";
+        g.textBaseline = "middle";
+        g.font = `${tam * 0.8}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+        g.fillText(emoji, tam / 2, tam / 2 + tam * 0.05);
+        cache.set(emoji, c);
+        return c;
+      }
+
+      function redimensionar() {
+        DPR = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = W * DPR;
+        canvas.height = H * DPR;
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        // Densidad según el área de pantalla
+        maxParticulas = Math.round(Math.min(220, Math.max(60, (W * H) / 7000)));
+        if (reducirMovimiento) maxParticulas = Math.round(maxParticulas / 3);
+      }
+
+      const azar = (a, b) => a + Math.random() * (b - a);
+
+      function crear(x, y, explosion = false) {
+        const profundidad = Math.random(); // 0 = lejos, 1 = cerca
+        const tam = 16 + profundidad * 34;
+        const p = {
+          img: sprite(FLORES[(Math.random() * FLORES.length) | 0]),
+          x: x ?? azar(-20, W + 20),
+          y: y ?? azar(-H * 0.2, -40),
+          tam,
+          vy: 0.5 + profundidad * 1.6,
+          vx: 0,
+          fase: azar(0, Math.PI * 2),
+          oscila: azar(0.4, 1.4),
+          rot: azar(0, Math.PI * 2),
+          vrot: azar(-0.02, 0.02),
+          alfa: 0.55 + profundidad * 0.45,
+          vida: 1,
+          explosion
+        };
+        if (explosion) {
+          const ang = azar(0, Math.PI * 2);
+          const fuerza = azar(2, 7);
+          p.vx = Math.cos(ang) * fuerza;
+          p.vy = Math.sin(ang) * fuerza - 2;
+          p.vrot = azar(-0.1, 0.1);
+        }
+        return p;
+      }
+
+      // Llenado inicial: flores ya repartidas por toda la pantalla
+      function sembrar() {
+        particulas = [];
+        for (let i = 0; i < maxParticulas; i++) {
+          particulas.push(crear(azar(0, W), azar(-H, H)));
+        }
+      }
+
+      let ultimo = performance.now();
+      let t = 0;
+
+      function animar(ahora) {
+        const dt = Math.min((ahora - ultimo) / 16.67, 3);
+        ultimo = ahora;
+        t += 0.016 * dt;
+
+        ctx.clearRect(0, 0, W, H);
+
+        // Mantiene la cascada continua
+        let normales = 0;
+        for (const p of particulas) if (!p.explosion) normales++;
+        while (normales < maxParticulas) { particulas.push(crear()); normales++; }
+
+        for (let i = particulas.length - 1; i >= 0; i--) {
+          const p = particulas[i];
+
+          if (p.explosion) {
+            p.vx *= 0.97;
+            p.vy = p.vy * 0.97 + 0.08 * dt;
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+            p.vida -= 0.006 * dt;
+          } else {
+            p.x += (Math.sin(t * p.oscila + p.fase) * 0.8 + 0.25) * dt;
+            p.y += p.vy * dt;
+          }
+          p.rot += p.vrot * dt;
+
+          if (p.y - p.tam > H || p.x < -80 || p.x > W + 80 || p.vida <= 0) {
+            particulas.splice(i, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.globalAlpha = p.alfa * Math.max(0, Math.min(1, p.vida));
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.drawImage(p.img, -p.tam / 2, -p.tam / 2, p.tam, p.tam);
+          ctx.restore();
+        }
+
+        requestAnimationFrame(animar);
+      }
+
+      // Interacción: al tocar/clic brota un ramillete de flores
+      function brotar(e) {
+        const x = e.clientX ?? (e.touches && e.touches[0].clientX);
+        const y = e.clientY ?? (e.touches && e.touches[0].clientY);
+        if (x == null) return;
+        const n = reducirMovimiento ? 8 : 22;
+        for (let i = 0; i < n; i++) particulas.push(crear(x, y, true));
+      }
+
+      window.addEventListener("pointerdown", brotar);
+      window.addEventListener("resize", () => { redimensionar(); });
+
+      redimensionar();
+      sembrar();
+      requestAnimationFrame(animar);
+    })();
+  </script>
+</body>
+</html>
